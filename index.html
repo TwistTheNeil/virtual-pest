@@ -1,0 +1,226 @@
+<html>
+  <head>
+    <title>Your Virtual Kitty!</title>
+		<script><!--start hiding
+			var pKitty
+			function pPest(pState,pAction,pSound,counter,image)//a constructor for the pest
+			{
+				this.pState=pState
+				this.pAction=pAction
+				this.pSound=pSound
+				this.counter=counter// counts the times mainFunc() is called
+				this.image=image
+			}
+			function activate()//this function is called with onLoad()
+			{
+				alert("Virtual Kitty Activated!")
+				pKitty = new pPest("happy","*dances*","Meow!",0,"happy.gif")
+				doState(pKitty)
+				setTimeout("mainFunc(pKitty)",1000)
+			}
+			
+			function amIGettingHere(){//simple function used to debug the pest
+				alert("Hi")
+			}
+			
+			function doState(pest)// this function will update the pests pSound and pAction text according to the states in which the pest is in
+			{
+				var pState = pest.pState
+				if (pState == "happy")
+				{
+					pest.pSound="Meow!"
+					pest.pAction="*Dances*"
+					pest.image="happy.gif"
+				}
+				else if(pState == "lonely")
+				{
+					pest.pSound="*sniff sniff*"
+					pest.pAction="*sits alone*"
+					pest.image="lonely.gif"
+				}
+				else if(pState == "bored")
+				{
+					pest.pSound="Yawn.."
+					pest.pAction="*yawns*"
+					pest.image="bored.gif"
+				}
+				else if(pState == "sad")
+				{
+					pest.pSound="WWAHHHHH!"
+					pest.pAction="*Cries*"
+					pest.image="sad.gif"
+				}
+				else if(pState == "mad")
+				{
+					pest.pSound="MMRROOWWWWWW!"
+					pest.pAction="*Yelling*"
+					pest.image="mad.gif"
+				}
+				else if(pState == "kiss")
+				{	
+					pest.pSound="*chuckle*"
+					pest.pAction="*kisses back*"
+					pest.image="kiss.gif"
+				}
+				else if(pState == "insulted")
+				{	
+					pest.pSound="*hmm*"
+					pest.pAction="*gives you the evil eye*"
+					pest.image="insulted.gif"
+				}
+				else if(pState == "dead")
+				{	
+					pest.pSound="*ARRGGHH *chokes**coughs**"
+					pest.pAction="*dies*"
+					pest.image="ded.jpg"
+				}
+				document.getElementById("pState").value = pest.pState
+				document.getElementById("pAction").value = pest.pAction
+				document.getElementById("pSound").value = pest.pSound
+				document.getElementById("counter").value = pest.counter
+				document.getElementById("image").src = pest.image
+			}
+			function patkitty(pest)// this functin will pat the pest and will have the following changes according to the state of which the pest is in
+			{
+				var pState = pest.pState// the pest's state variable
+				if(pState=="lonely")
+				{
+					pest.pState="happy"
+				}
+				else if(pState=="bored")
+				{
+					pest.pState="mad"
+				}
+				else if(pState=="sad")
+				{
+					pest.pState="mad"
+				}
+				else if(pState == "insulted")
+				{
+					pest.pState="happy"
+				}
+				doState(pest)//calls the function to show the pest's pState and pAction and to update the picture in the webpage
+			}
+			function feedkitty(pest)// this function feeds the pest and will have the following changes according to its state
+			{
+				var pState
+				pState=pest.pState //the pests state
+				if(pState=="mad")
+				{
+					pest.pState="happy"
+				}
+				else if(pState=="sad")
+				{
+					pest.pState="happy"
+				}
+				else if(pState=="insulted")
+				{
+					pest.pState="happy"
+				}
+				doState(pest)//calls the function to show the pest's pState and pAction and to update the picture in the webpage
+			}
+			function mainFunc(pest)
+			{	/* This is the main function which is used to simulate the pest and does all the pest.pState transitions 
+					which are in a finite state machine.
+				*/
+				pest.counter++ //updates the counter
+				var pState=pest.pState // the pests state
+				var q=Math.random() //a random number between 0 and 1 is produced
+				//these are the rules that the virtual pest operats on
+				if(pState == "happy" && q < 1)
+				{
+					pest.pState="lonely" 
+				}
+				else if(pState == "lonely" && q < 0.7 )
+				{
+					pest.pState = "bored"
+				}
+				else if(pState == "bored" && q < 0.8)
+				{
+					pest.pState="sad"
+				}
+				else if(pState == "sad" && q < 0.8)
+				{
+					pest.pState="mad"
+				}
+				else if(pState == "kiss" && q < 0.8)
+				{
+					pest.pState="happy"
+				}
+				else if(pState == "insulted" && q < 0.8)
+				{
+					pest.pState="insulted"
+				}
+				else if(pState == "dead" )
+				{
+					pest.pState="dead"
+				}
+				doState(pest) // the display is updated to show the new state of the pest
+				setTimeout("mainFunc(pKitty)",4000)//the mainFunc() is set to run after a delay of 4 seconds
+			}
+			
+			function newpest() //opens up a new window with a pest
+			{
+				var load = window.open('index.html','','scrollbars=no,menubar=no,height=600,width=800,resizable=yes,toolbar=no,location=no,status=no');
+			}
+			function kisskitty(pest)
+			{
+				if (pest.pState !="dead")// if pest is not dead, give a kiss
+				{
+					pest.pState="kiss"
+					doState(pest)
+					setTimeout("mainFunc(pKitty)",4000)
+				}
+			}
+			function insultkitty(pest)// if pest is not dead, insult it
+			{
+				if(pest.pState != "dead")
+				{
+					pest.pState="insulted"
+					doState(pest)
+					setTimeout("mainFunc(pKitty)",1000)
+				}
+			}
+			function killkitty(pest)//if pest is not dead, kill it, else give an alert saying that she is already dead
+			{
+				if (pest.pState != "dead")
+				{
+					alert('YOU CRIMINAL! ;c')
+					pest.pState="dead"
+					doState(pest)
+				}
+				else if (pest.pState == "dead")
+				{
+					alert('She is dead ! Stop trying to kill her ! Whose still stabbing ?!')
+				}
+			}
+		//end hiding--></script>	
+  </head>
+  
+  <body style="background-color:grey;font-family:verdana;" onLoad="activate()">
+  <h1 style="text-align:center;">Virtual Kitty!</h1>
+  <form name="p3est" style="text-align:center;" ID="pest">
+      <p style="background-color:grey;text-align:center"><img id="image" src=pKitty.image/></p>
+ 
+		<p>
+		
+      Pet State:<input type="text" name="pState" value="" ID="pState"/></br>
+	  Pet Sound:<input type="text" name="pSound" value="" size=27 ID="pSound"/></br>
+	  Pet Action:<input type="text" name="pAction" value=""ID="pAction"/>
+	  <input type=hidden name="counter" id="counter" size=5>
+      
+		</p>
+		<p>
+      <form style="text-align:center;">
+	  <input type="button" name="pPat" value="Pat your Kitty!" ID="ppID" onClick="patkitty(pKitty)"/>
+	  <input type="button" name="pFeed" value="Give your kitty some milk!" ID="fpID" onClick="feedkitty(pKitty)"/>
+      <input type="button" name="pB" value="Want another Pet ?" ID="tt" onClick="newpest()"/>
+	  <input type="button" name="pK" value="Give kitty a kiss!" ID="tgt" onClick="kisskitty(pKitty)"/>
+	  <input type="button" name="pt" value="Insult the kitty :O" ID="tggt" onClick="insultkitty(pKitty)"/>
+	  <input type="button" name="ptd" value="Kill the kitty :O" ID="tggdt" onClick="killkitty(pKitty)"/>
+		</p>
+  </form>
+  <p>Virtual Kitty by Neil Castelino<p>
+  <p>Copyright © 2011 Neil'sStuff. All rights reserved. Any illegal reproduction or redistribution of this code in part or in whole is fine by me.<p>
+  </body>
+</html>
